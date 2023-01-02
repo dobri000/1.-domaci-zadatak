@@ -1,19 +1,20 @@
-<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Pocetna</title>
+    <title>Odbojka</title>
 </head>
 
 <body>
     <nav>
         <ul>
-            <li><a href="index.php">Pocetna</a></li>
-            <li>Tabela</li>
-            <li>Rezutati</li>
-            <li>Timovi</li>
+            <li><a href="index.php">Tabela</a></li>
+            <li><a href="rezultati.php">Rezutati</a></li>
+            <li><a href="unos.php">Unos rezultata</a></li>
         </ul>
     </nav>
+    <div>
+        <h2>Trenutno stanje na tabeli:</h2>
+    </div>
     <div>
         <table>
             <thead>
