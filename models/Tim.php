@@ -201,6 +201,21 @@
 
             return new Tim($row["timId"], $row["ime"], $row["odigranih"], $row["pobeda"], $row["poraza"], $row["osvojenihSetova"], $row["izgubljenihSetova"], $row["bodova"]);
         }
+
+        public static function returnIdByName($ime){
+            include "connection.php";
+
+
+            $stmt = $conn->prepare("select timId from tim where lower(ime) = ?");
+            $stmt->bind_param("s", $ime);
+            $stmt->execute();
+
+            $data = $stmt->get_result();
+
+            $row = $data->fetch_assoc();
+
+            return $row["timId"];
+        }
         
         public static function returnAllDataSorted($column_name, $order){
             include "connection.php";
@@ -214,6 +229,19 @@
             }
 
             return $timArray;
+        }
+
+        public static function returnNameSuggest($str){
+            include "connection.php";
+
+            $data = $conn->query("select ime from tim where lower(ime) like '".strtolower($str)."%'");
+
+            $array = array();
+            while($row = $data->fetch_assoc()){ 
+                array_push($array, $row["ime"]);
+            }
+
+            return $array;
         }
 
     }

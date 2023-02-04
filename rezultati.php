@@ -2,6 +2,37 @@
 
 <head>
     <title>Odbojka</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <script>
+        function predloziTim(str){
+            if(str.length == 0){
+                document.getElementById("timHint").innerHTML = "";
+                return;
+            }
+            $.ajax({
+                url:"suggest.php",
+                method:"POST",
+                data:{name:str},
+                success:function(data){
+                    document.getElementById("timHint").innerHTML = data;
+                }
+            })
+        }
+
+        function prikaziUtakmiceTima(){
+            var name = document.getElementById("tim").value.toLowerCase();
+            $.ajax({
+                url:"filter.php",
+                method:"POST",
+                data:{name:name},
+                success:function(data){
+                    document.getElementById("rezultati").innerHTML = data;
+                }
+            })
+        }
+
+    </script>
 </head>
 
 <body>
@@ -15,7 +46,12 @@
     <div>
         <h2>Rezultati utakmica:</h2>
     </div>
-    <div class="rezultati">
+    <div>
+        <input type="text" id="tim" onkeyup="predloziTim(this.value)">
+        <button onclick="prikaziUtakmiceTima()">Prikazi utakmice</button>
+        <p id="timHint">Predlozi: </p>
+    </div>
+    <div id="rezultati">
         <?php
             include "models/Rezultat.php";
             include "models/Tim.php";
@@ -39,39 +75,43 @@
                 echo "</form>";
                 echo "</div>";
             }
-
-            if(isset($_POST['obrisi'])){
-                $imePrvog = $_POST['prvi_tim'];
-                $imeDrugog = $_POST['drugi_tim'];
-                $prviSetova = $_POST['prviSetova'];
-                $drugiSetova = $_POST['drugiSetova'];
-                $datum = $_POST['datum'];
-                $prviTim = Tim::returnTeamByName($imePrvog);
-                $drugiTim = Tim::returnTeamByName($imeDrugog);
-                if ($prviSetova == 2) {
-                    if ($drugiSetova == 0) {
-                        $prviTim->obrisiPobeda20();
-                        $drugiTim->obrisiPoraz02();
-                    }
-                    if ($drugiSetova == 1) {
-                        $prviTim->obrisiPobeda21();
-                        $drugiTim->obrisiPoraz12();
-                    }
-                } else if ($prviSetova == 1) {
-                    $prviTim->obrisiPoraz12();
-                    $drugiTim->obrisiPobeda21();
-                } else {
-                    $prviTim->obrisiPoraz02();
-                    $drugiTim->obrisiPobeda20();
-                }
-                $prviTim->updateTim();
-                $drugiTim->updateTim();
-                Rezultat::deleteResult($prviTim->getTimId(), $drugiTim->getTimId(), $datum);
-                echo $imeDrugog, Tim::returnTeamByName($imeDrugog)->getIme(), $prviTim->getTimId(), $drugiTim->getTimId(), $datum;
-                unset($_POST['obrisi']);
-            }
         ?>
     </div>
 </body>
 
 </html>
+
+<?php
+
+if(isset($_POST['obrisi'])){
+    $imePrvog = $_POST['prvi_tim'];
+    $imeDrugog = $_POST['drugi_tim'];
+    $prviSetova = $_POST['prviSetova'];
+    $drugiSetova = $_POST['drugiSetova'];
+    $datum = $_POST['datum'];
+    $prviTim = Tim::returnTeamByName($imePrvog);
+    $drugiTim = Tim::returnTeamByName($imeDrugog);
+    if ($prviSetova == 2) {
+        if ($drugiSetova == 0) {
+            $prviTim->obrisiPobeda20();
+            $drugiTim->obrisiPoraz02();
+        }
+        if ($drugiSetova == 1) {
+            $prviTim->obrisiPobeda21();
+            $drugiTim->obrisiPoraz12();
+        }
+    } else if ($prviSetova == 1) {
+        $prviTim->obrisiPoraz12();
+        $drugiTim->obrisiPobeda21();
+    } else {
+        $prviTim->obrisiPoraz02();
+        $drugiTim->obrisiPobeda20();
+    }
+    $prviTim->updateTim();
+    $drugiTim->updateTim();
+    Rezultat::deleteResult($prviTim->getTimId(), $drugiTim->getTimId(), $datum);
+    echo $imeDrugog, Tim::returnTeamByName($imeDrugog)->getIme(), $prviTim->getTimId(), $drugiTim->getTimId(), $datum;
+    unset($_POST['obrisi']);
+}
+
+?>

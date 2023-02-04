@@ -59,6 +59,20 @@
             return $rezultatArray;
         }
 
+        public static function returnTeamResults($id){
+            include "connection.php";
+
+            $rezultatArray = array();
+            $data = $conn->query("select * from rezultat where prviTimId = " . $id . " or drugiTimId = " . $id . " order by datum desc");
+
+            while($row = $data->fetch_assoc()){
+                $rezultat = new Rezultat($row["prviTimId"], $row["drugiTimId"], $row["prviTimSetova"], $row["drugiTimSetova"], $row["datum"]);
+                array_push($rezultatArray, $rezultat);
+            }
+
+            return $rezultatArray;
+        }
+
         public static function deleteResult($prviTimId, $drugiTimId, $datum){
             include "connection.php";
 
