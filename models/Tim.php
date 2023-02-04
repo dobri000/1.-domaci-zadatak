@@ -97,6 +97,13 @@
             $this->bodova += 3;
         }
 
+        public function obrisiPobeda20(){
+            $this->pobeda--;
+            $this->odigranih--;
+            $this->osvojenihSetova -= 2;
+            $this->bodova -= 3;
+        }
+
         public function pobeda21(){
             $this->pobeda++;
             $this->odigranih++;
@@ -105,10 +112,24 @@
             $this->izgubljenihSetova++;
         }
 
+        public function obrisiPobeda21(){
+            $this->pobeda--;
+            $this->odigranih--;
+            $this->osvojenihSetova -= 2;
+            $this->bodova -= 2;
+            $this->izgubljenihSetova--;
+        }
+
         public function poraz02(){
             $this->poraza++;
             $this->odigranih++;
             $this->izgubljenihSetova += 2;
+        }
+
+        public function obrisiPoraz02(){
+            $this->poraza--;
+            $this->odigranih--;
+            $this->izgubljenihSetova -= 2;
         }
 
         public function poraz12(){
@@ -117,6 +138,14 @@
             $this->osvojenihSetova += 1;
             $this->bodova += 1;
             $this->izgubljenihSetova += 2;
+        }
+
+        public function obrisiPoraz12(){
+            $this->poraza--;
+            $this->odigranih--;
+            $this->osvojenihSetova -= 1;
+            $this->bodova -= 1;
+            $this->izgubljenihSetova -= 2;
         }
 
         public function updateTim(){
@@ -133,7 +162,7 @@
             include "connection.php";
 
             $timArray = array();
-            $data = $conn->query("select * from tim order by pobeda desc, bodova desc, osvojenihSetova desc");
+            $data = $conn->query("select * from tim order by pobeda desc, bodova desc, osvojenihSetova - izgubljenihSetova desc, osvojenihSetova desc, izgubljenihSetova asc");
 
             while($row = $data->fetch_assoc()){
                 $tim = new Tim($row["timId"], $row["ime"], $row["odigranih"], $row["pobeda"], $row["poraza"], $row["osvojenihSetova"], $row["izgubljenihSetova"], $row["bodova"]);
@@ -143,7 +172,7 @@
             return $timArray;
         }
 
-        public static function returnThisTeam($timId){
+        public static function returnTeamById($timId){
             include "connection.php";
 
 
@@ -157,5 +186,34 @@
 
             return new Tim($row["timId"], $row["ime"], $row["odigranih"], $row["pobeda"], $row["poraza"], $row["osvojenihSetova"], $row["izgubljenihSetova"], $row["bodova"]);
         }
+
+        public static function returnTeamByName($ime){
+            include "connection.php";
+
+
+            $stmt = $conn->prepare("select * from tim where ime = ?");
+            $stmt->bind_param("s", $ime);
+            $stmt->execute();
+
+            $data = $stmt->get_result();
+
+            $row = $data->fetch_assoc();
+
+            return new Tim($row["timId"], $row["ime"], $row["odigranih"], $row["pobeda"], $row["poraza"], $row["osvojenihSetova"], $row["izgubljenihSetova"], $row["bodova"]);
+        }
         
+        public static function returnAllDataSorted($column_name, $order){
+            include "connection.php";
+
+            $timArray = array();
+            $data = $conn->query("select * from tim order by ".$column_name." ".$order);
+
+            while($row = $data->fetch_assoc()){
+                $tim = new Tim($row["timId"], $row["ime"], $row["odigranih"], $row["pobeda"], $row["poraza"], $row["osvojenihSetova"], $row["izgubljenihSetova"], $row["bodova"]);
+                array_push($timArray, $tim);
+            }
+
+            return $timArray;
+        }
+
     }

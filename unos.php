@@ -16,6 +16,7 @@
         <div><input type="date" name="datum"></div>
         <div>
             <select name="prviTim">
+                <option value="">Prvi protivnik</option>
                 <option value=1>Fakultet organizacionih nauka</option>
                 <option value=2>Elektrotehnicki fakultet</option>
                 <option value=3>Fakultet sporta i fizickog vaspitanja</option>
@@ -27,6 +28,7 @@
             <input name="prviTimSetova" type="number" min=0 max=2 value="0">
             <input name="drugiTimSetova" type="number" min=0 max=2 value="0">
             <select name="drugiTim">
+                <option value="">Drugi protivnik</option>
                 <option value=1>Fakultet organizacionih nauka</option>
                 <option value=2>Elektrotehnicki fakultet</option>
                 <option value=3>Fakultet sporta i fizickog vaspitanja</option>
@@ -49,8 +51,8 @@
                 $drugiTimSetova = $_POST['drugiTimSetova'];
                 $datum = $_POST['datum'];
                 if ($prviTim != $drugiTim) {
-                    $timPrvi = Tim::returnThisTeam($prviTim);
-                    $timDrugi = Tim::returnThisTeam($drugiTim);
+                    $timPrvi = Tim::returnTeamById($prviTim);
+                    $timDrugi = Tim::returnTeamById($drugiTim);
                     if ($prviTimSetova == 2) {
                         if ($drugiTimSetova == 0) {
                             $timPrvi->pobeda20();
@@ -67,8 +69,8 @@
                         $timPrvi->poraz02();
                         $timDrugi->pobeda20();
                     }
-                    //$timPrvi->updateTim();
-                    //$timDrugi->updateTim();
+                    $timPrvi->updateTim();
+                    $timDrugi->updateTim();
                     $rezultat = new Rezultat($prviTim, $drugiTim, $prviTimSetova, $drugiTimSetova, date('Y-m-d', strtotime($datum)));
                     $rezultat->insertResult();
                     echo 'Utakmica je uneta';

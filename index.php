@@ -2,6 +2,9 @@
 
 <head>
     <title>Odbojka</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -15,17 +18,17 @@
     <div>
         <h2>Trenutno stanje na tabeli:</h2>
     </div>
-    <div>
-        <table>
+    <div class="table-repsonsive" id="sport_table">
+        <table class="table table-bordered">
             <thead>
                 <th>Pozicija</th>
-                <th>Tim</th>
-                <th>Odigranih utakmica</th>
-                <th>Pobeda</th>
-                <th>Poraza</th>
-                <th>Osvojenih setova</th>
-                <th>Izgubljenih setova</th>
-                <th>Bodova</th>
+                <th><a class="column_sort" id="ime" data-order="asc" href="#">Tim</a></th>
+                <th><a class="column_sort" id="odigranih" data-order="desc" href="#">Odigranih utakmica</a></th>
+                <th><a class="column_sort" id="pobeda" data-order="desc" href="#">Pobeda</a></th>
+                <th><a class="column_sort" id="poraza" data-order="asc" href="#">Poraza</a></th>
+                <th><a class="column_sort" id="osvojenihSetova" data-order="desc" href="#">Osvojenih setova</a></th>
+                <th><a class="column_sort" id="izgubljenihSetova" data-order="asc" href="#">Izgubljenih setova</a></th>
+                <th><a class="column_sort" id="bodova" data-order="asc" href="#">Bodova</a></th>
             </thead>
             <tbody>
                 <?php
@@ -51,3 +54,26 @@
 </body>
 
 </html>
+<script>
+    $(document).ready(function(){
+        $(document).on('click', '.column_sort', function(){
+            var column_name = $(this).attr("id");
+            var order = $(this).data("order");
+            var arrow = '';
+            if(order == 'desc'){
+                arrow = '&nbsp;<span class="glyphicon glyphicon-arrow-down"></span>';
+            } else {
+                arrow = '&nbsp;<span class="glyphicon glyphicon-arrow-up"></span>';
+            }
+            $.ajax({
+                url:"sort.php",
+                method:"POST",
+                data:{column_name:column_name, order:order},
+                success:function(data){
+                    $('#sport_table').html(data);
+                    $('#'+column_name+' ').append(arrow);
+                }
+            })
+        })
+    })
+</script>

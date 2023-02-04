@@ -59,6 +59,14 @@
             return $rezultatArray;
         }
 
+        public static function deleteResult($prviTimId, $drugiTimId, $datum){
+            include "connection.php";
+
+            $stmt = $conn->prepare("delete from rezultat where prviTimId = ? and drugiTimId = ? and datum = ?");
+            $stmt->bind_param("iis", $prviTimId, $drugiTimId, $datum);
+            $stmt->execute();
+        }
+
     }
 
 ?>
