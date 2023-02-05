@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <html>
 
 <head>
@@ -8,11 +12,16 @@
 </head>
 
 <body>
+    <?php
+        $_SESSION['izmene'] = array();
+    ?>
     <nav>
         <ul>
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
             <li><a href="unos.php">Unos rezultata</a></li>
+            <li><a href="istorija.php">Istorija izmena</a></li>
+
         </ul>
     </nav>
     <div>

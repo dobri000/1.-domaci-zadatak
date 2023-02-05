@@ -1,7 +1,20 @@
+<?php
+session_start();
+?>
+
 <html>
 
 <head>
     <title>Odbojka</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <script>
+        $(function(){
+            $("#datepicker").datepicker();
+        })
+    </script>
 </head>
 
 <body>
@@ -10,38 +23,36 @@
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
             <li><a href="unos.php">Unos rezultata</a></li>
+            <li><a href="istorija.php">Istorija izmena</a></li>
+
         </ul>
     </nav>
     <form method="post">
-        <div><input type="date" name="datum"></div>
+        <div><input type="text" id="datepicker" name="datum"></div>
         <div>
             <select name="prviTim">
                 <option value="">Prvi protivnik</option>
-                <option value=1>Fakultet organizacionih nauka</option>
-                <option value=2>Elektrotehnicki fakultet</option>
-                <option value=3>Fakultet sporta i fizickog vaspitanja</option>
-                <option value=4>ATUSS</option>
-                <option value=5>Stomatoloski fakultet</option>
-                <option value=6>Medicinski fakultet</option>
-                <option value=7>Ekonomski fakultet</option>
-            </select>
-            <input name="prviTimSetova" type="number" min=0 max=2 value="0">
-            <input name="drugiTimSetova" type="number" min=0 max=2 value="0">
-            <select name="drugiTim">
-                <option value="">Drugi protivnik</option>
-                <option value=1>Fakultet organizacionih nauka</option>
-                <option value=2>Elektrotehnicki fakultet</option>
-                <option value=3>Fakultet sporta i fizickog vaspitanja</option>
-                <option value=4>ATUSS</option>
-                <option value=5>Stomatoloski fakultet</option>
-                <option value=6>Medicinski fakultet</option>
-                <option value=7>Ekonomski fakultet</option>
+                <?php
+                    include "models/Tim.php";
+                    $array = Tim::returnAllData();
+                    foreach ($array as $tim){
+                        echo "<option value=".$tim->getTimId().">".$tim->getIme()."</option>";
+                    }
+            echo "</select>";
+            echo '<input name="prviTimSetova" type="number" min=0 max=2 value="0">';
+            echo '<input name="drugiTimSetova" type="number" min=0 max=2 value="0">';
+            echo '<select name="drugiTim">';
+            echo '<option value="">Drugi protivnik</option>';
+                    foreach ($array as $tim){
+                        echo "<option value=".$tim->getTimId().">".$tim->getIme()."</option>";
+                    }
+                ?>
             </select>
         </div>
         <div><input type="submit" name="unesi" value="Unesi utakmicu"></div>
         <div>
             <?php
-            include "models/Tim.php";
+            //include "models/Tim.php";
             include "models/Rezultat.php";
 
             if (isset($_POST['unesi'])) {
@@ -75,6 +86,7 @@
                     $rezultat->insertResult();
                     echo 'Utakmica je uneta';
                     unset($_POST['unesi']);
+                    array_push($_SESSION['izmene'], array("izmena" => "unos", "prviTim"=>$prviTim, "drugiTim" => $drugiTim, "prviTimSetova" => $prviTimSetova, "drugiTimSetova" => $drugiTimSetova, "datum" => date('Y-m-d', strtotime($datum))));
                 } else {
                     echo 'Timovi treba da budu razliciti';
                 }

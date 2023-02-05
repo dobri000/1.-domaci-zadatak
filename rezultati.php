@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <html>
 
 <head>
@@ -41,12 +45,15 @@
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
             <li><a href="unos.php">Unos rezultata</a></li>
+            <li><a href="istorija.php">Istorija izmena</a></li>
+
         </ul>
     </nav>
     <div>
         <h2>Rezultati utakmica:</h2>
     </div>
-    <div>
+    <div class="filter">
+        <h4>Filter</h4>
         <input type="text" id="tim" onkeyup="predloziTim(this.value)">
         <button onclick="prikaziUtakmiceTima()">Prikazi utakmice</button>
         <p id="timHint">Predlozi: </p>
@@ -112,6 +119,7 @@ if(isset($_POST['obrisi'])){
     Rezultat::deleteResult($prviTim->getTimId(), $drugiTim->getTimId(), $datum);
     echo $imeDrugog, Tim::returnTeamByName($imeDrugog)->getIme(), $prviTim->getTimId(), $drugiTim->getTimId(), $datum;
     unset($_POST['obrisi']);
+    array_push($_SESSION['izmene'], array("izmena" => "brisanje", "prviTim"=>($prviTim->getTimId()), "drugiTim" => ($drugiTim->getTimId()), "prviTimSetova" => $prviSetova, "drugiTimSetova" => $drugiSetova, "datum" => $datum));
 }
 
 ?>
