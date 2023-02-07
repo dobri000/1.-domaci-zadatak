@@ -7,15 +7,15 @@ session_start();
 <head>
     <title>Odbojka</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 
 <body>
     <?php
         $_SESSION['izmene'] = array();
     ?>
-    <nav>
+    <nav class="navbar navbar-dark bg-dark">
         <ul>
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
@@ -25,11 +25,11 @@ session_start();
         </ul>
     </nav>
     <div>
-        <h2>Trenutno stanje na tabeli:</h2>
+        <h2 class="display-4">Trenutno stanje na tabeli:</h2>
     </div>
     <div class="table-repsonsive" id="sport_table">
-        <table class="table table-bordered">
-            <thead>
+        <table class="table">
+            <thead class="table-dark">
                 <th>Pozicija</th>
                 <th><a class="column_sort" id="ime" data-order="asc" href="#">Tim</a></th>
                 <th><a class="column_sort" id="odigranih" data-order="desc" href="#">Odigranih utakmica</a></th>
@@ -68,19 +68,12 @@ session_start();
         $(document).on('click', '.column_sort', function(){
             var column_name = $(this).attr("id");
             var order = $(this).data("order");
-            var arrow = '';
-            if(order == 'desc'){
-                arrow = '&nbsp;<span class="glyphicon glyphicon-arrow-down"></span>';
-            } else {
-                arrow = '&nbsp;<span class="glyphicon glyphicon-arrow-up"></span>';
-            }
             $.ajax({
                 url:"sort.php",
                 method:"POST",
                 data:{column_name:column_name, order:order},
                 success:function(data){
                     $('#sport_table').html(data);
-                    $('#'+column_name+' ').append(arrow);
                 }
             })
         })

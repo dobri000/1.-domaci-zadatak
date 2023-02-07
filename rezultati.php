@@ -7,11 +7,14 @@ session_start();
 <head>
     <title>Odbojka</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 
     <script>
         function predloziTim(str){
             if(str.length == 0){
-                document.getElementById("timHint").innerHTML = "";
+                document.getElementById("timHint").innerHTML = "Predlozi:";
                 return;
             }
             $.ajax({
@@ -40,7 +43,7 @@ session_start();
 </head>
 
 <body>
-    <nav>
+    <nav class="navbar navbar-dark bg-dark">
         <ul>
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
@@ -50,13 +53,13 @@ session_start();
         </ul>
     </nav>
     <div>
-        <h2>Rezultati utakmica:</h2>
+        <h2 class="display-4">Rezultati utakmica:</h2>
     </div>
     <div class="filter">
-        <h4>Filter</h4>
+        <h4 class="h4">Filter</h4>
         <input type="text" id="tim" onkeyup="predloziTim(this.value)">
         <button onclick="prikaziUtakmiceTima()">Prikazi utakmice</button>
-        <p id="timHint">Predlozi: </p>
+        <p class="h6" id="timHint">Predlozi: </p>
     </div>
     <div id="rezultati">
         <?php
@@ -69,14 +72,14 @@ session_start();
                 $timDrugi = Tim::returnTeamById($rezultat->getDrugiTimId());
                 echo "<div class='rezultat'>";
                 echo "<form action='rezultati.php' method='post'>";
-                echo "<div><input type='date' name='datum' value='" . $rezultat->getDatum() . "' readonly></div>";
-                echo "<div>";
-                echo "<span><input type='text' name='prvi_tim' value='" . $timPrvi->getIme() . "' readonly>: </span><span><input type='number' name = 'prviSetova' value='" . $rezultat->getPrviTimSetova() . "' readonly></span>";
+                echo "<div class='datum'><input type='date' name='datum' value='" . $rezultat->getDatum() . "' readonly></div>";
+                echo "<div class='team'>";
+                echo "<span class='teamName'><input type='text' name='prvi_tim' value='" . $timPrvi->getIme() . "' readonly></span><span><input type='number' name = 'prviSetova' value='" . $rezultat->getPrviTimSetova() . "' readonly></span>";
                 echo "</div>";
-                echo "<div>";
-                echo "<span><input type='text' name='drugi_tim' value='" . $timDrugi->getIme() . "' readonly>: </span><span><input type='number' name = 'drugiSetova' value='" . $rezultat->getDrugiTimSetova() . "' readonly></span>";
+                echo "<div class='tim'>";
+                echo "<span class='teamName'><input type='text' name='drugi_tim' value='" . $timDrugi->getIme() . "' readonly></span><span><input type='number' name = 'drugiSetova' value='" . $rezultat->getDrugiTimSetova() . "' readonly></span>";
                 echo "</div>";
-                echo "<div>";
+                echo "<div class='dugme'>";
                 echo "<input type='submit' name='obrisi' value='Obrisi rezultat'>";
                 echo "</div>";
                 echo "</form>";
@@ -120,6 +123,7 @@ if(isset($_POST['obrisi'])){
     echo $imeDrugog, Tim::returnTeamByName($imeDrugog)->getIme(), $prviTim->getTimId(), $drugiTim->getTimId(), $datum;
     unset($_POST['obrisi']);
     array_push($_SESSION['izmene'], array("izmena" => "brisanje", "prviTim"=>($prviTim->getTimId()), "drugiTim" => ($drugiTim->getTimId()), "prviTimSetova" => $prviSetova, "drugiTimSetova" => $drugiSetova, "datum" => $datum));
+    header("Location: index.php");
 }
 
 ?>

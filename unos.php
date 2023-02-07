@@ -9,6 +9,8 @@ session_start();
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <script>
         $(function(){
@@ -18,7 +20,7 @@ session_start();
 </head>
 
 <body>
-    <nav>
+    <nav class="navbar navbar-dark bg-dark">
         <ul>
             <li><a href="index.php">Tabela</a></li>
             <li><a href="rezultati.php">Rezutati</a></li>
@@ -27,10 +29,15 @@ session_start();
 
         </ul>
     </nav>
-    <form method="post">
-        <div><input type="text" id="datepicker" name="datum"></div>
+    <div>
+        <h2 class="display-4">Unesite rezultat:</h2>
+    </div>
+    <form class="formaUnosa" method="post">
         <div>
-            <select name="prviTim">
+            <input type="text" id="datepicker" name="datum" placeholder="Datum:">
+        </div>
+        <div class="unosElementi">
+            <select class="form-select" name="prviTim">
                 <option value="">Prvi protivnik</option>
                 <?php
                     include "models/Tim.php";
@@ -41,7 +48,7 @@ session_start();
             echo "</select>";
             echo '<input name="prviTimSetova" type="number" min=0 max=2 value="0">';
             echo '<input name="drugiTimSetova" type="number" min=0 max=2 value="0">';
-            echo '<select name="drugiTim">';
+            echo '<select class="form-select" name="drugiTim">';
             echo '<option value="">Drugi protivnik</option>';
                     foreach ($array as $tim){
                         echo "<option value=".$tim->getTimId().">".$tim->getIme()."</option>";
@@ -50,7 +57,7 @@ session_start();
             </select>
         </div>
         <div><input type="submit" name="unesi" value="Unesi utakmicu"></div>
-        <div>
+        <div class="obavestenje">
             <?php
             //include "models/Tim.php";
             include "models/Rezultat.php";

@@ -13,8 +13,8 @@
     $data = Tim::returnAllDataSorted($_POST['column_name'], $order);
 
     $output .= '
-    <table class="table table-bordered">
-            <thead>
+    <table class="table">
+            <thead class="table-dark">
                 <th>Pozicija</th>
                 <th><a class="column_sort" id="ime" data-order="'.$order.'" href="#">Tim</a></th>
                 <th><a class="column_sort" id="odigranih" data-order="'.$order.'" href="#">Odigranih utakmica</a></th>

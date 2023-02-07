@@ -1,0 +1,144 @@
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover{
+    background-color: #111;
+    color: white;
+    text-decoration-line: none;
+}
+
+th a{
+    color: white;
+}
+
+th a:hover{
+    color: white;
+    text-decoration-line: none;
+}
+
+.rezultat .dugme input{
+    display: none;
+    width: 500px;
+    position: absolute;
+    bottom: 0;
+    border-radius: 10px;
+}
+
+.rezultat:hover .dugme input{
+    display: inline;
+}
+
+.filter{
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.rezultat{
+    position: relative;
+    height: 150px;
+    width: 500px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.rezultat:hover{
+    background-color: #343A40;
+}
+
+.rezultat input{
+    border: hidden;
+    padding-left: 10px;
+    margin: 1px;
+    color: #343A40;
+}
+
+.rezultat:hover input{
+    background-color: #343A40;
+    color: white;
+}
+
+.rezultat input:focus{
+    outline: none;
+}
+
+.teamName input{
+    width: 300px;
+}
+
+#rezultati{
+    display: grid;
+    grid-template-columns: auto auto;
+    align-content: center;
+    justify-content: space-around;
+}
+
+.datum{
+    text-align: center;
+}
+
+#timHint{
+    margin-top: 5px;
+}
+
+.formaUnosa{
+    margin-top: 100px;
+    text-align: center;
+}
+
+.unosElementi{
+    margin: 40px 0 40px 0;
+    display: grid;
+    grid-template-columns: 300px 80px 80px 300px;
+    grid-column-gap: 20px;
+    text-align: center;
+    justify-content: center;
+}
+
+.obavestenje{
+    text-align: center;
+    margin-top: 40px;
+}
+
+#filter{
+    margin: 20px 0 0 40px;
+}
+
+.izmene{
+    margin-left: 20px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 400px 400px 400px;
+    column-gap: 50px;
+    grid-row-gap: 30px;
+}
+
+.unos{
+    border: #111 solid 2px;
+    width: 400px;
+    padding-left: 10px;
+}
+
+.brisanje{
+    border: #111 solid 2px;
+    width: 400px;
+    padding-left: 10px;
+
+}
