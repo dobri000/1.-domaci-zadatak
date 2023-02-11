@@ -13,7 +13,9 @@ session_start();
 
 <body>
     <?php
-        $_SESSION['izmene'] = array();
+        if(!isset($_SESSION['izmene'])){
+            $_SESSION['izmene'] = array();
+        }
     ?>
     <nav class="navbar navbar-dark bg-dark">
         <ul>

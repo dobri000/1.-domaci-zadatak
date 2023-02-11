@@ -13,7 +13,7 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <script>
-        $(function(){
+        $(function() {
             $("#datepicker").datepicker();
         })
     </script>
@@ -40,19 +40,19 @@ session_start();
             <select class="form-select" name="prviTim">
                 <option value="">Prvi protivnik</option>
                 <?php
-                    include "models/Tim.php";
-                    $array = Tim::returnAllData();
-                    foreach ($array as $tim){
-                        echo "<option value=".$tim->getTimId().">".$tim->getIme()."</option>";
-                    }
-            echo "</select>";
-            echo '<input name="prviTimSetova" type="number" min=0 max=2 value="0">';
-            echo '<input name="drugiTimSetova" type="number" min=0 max=2 value="0">';
-            echo '<select class="form-select" name="drugiTim">';
-            echo '<option value="">Drugi protivnik</option>';
-                    foreach ($array as $tim){
-                        echo "<option value=".$tim->getTimId().">".$tim->getIme()."</option>";
-                    }
+                include "models/Tim.php";
+                $array = Tim::returnAllData();
+                foreach ($array as $tim) {
+                    echo "<option value=" . $tim->getTimId() . ">" . $tim->getIme() . "</option>";
+                }
+                echo "</select>";
+                echo '<input name="prviTimSetova" type="number" min=0 max=2 value="0">';
+                echo '<input name="drugiTimSetova" type="number" min=0 max=2 value="0">';
+                echo '<select class="form-select" name="drugiTim">';
+                echo '<option value="">Drugi protivnik</option>';
+                foreach ($array as $tim) {
+                    echo "<option value=" . $tim->getTimId() . ">" . $tim->getIme() . "</option>";
+                }
                 ?>
             </select>
         </div>
@@ -68,35 +68,49 @@ session_start();
                 $prviTimSetova = $_POST['prviTimSetova'];
                 $drugiTimSetova = $_POST['drugiTimSetova'];
                 $datum = $_POST['datum'];
-                if ($prviTim != $drugiTim) {
-                    $timPrvi = Tim::returnTeamById($prviTim);
-                    $timDrugi = Tim::returnTeamById($drugiTim);
-                    if ($prviTimSetova == 2) {
-                        if ($drugiTimSetova == 0) {
-                            $timPrvi->pobeda20();
-                            $timDrugi->poraz02();
+                $dobarRezultat = false;
+                if ($datum != '') {
+                    if ($prviTim != $drugiTim) {
+                        $timPrvi = Tim::returnTeamById($prviTim);
+                        $timDrugi = Tim::returnTeamById($drugiTim);
+                        if ($prviTimSetova == 2) {
+                            if ($drugiTimSetova == 0) {
+                                $timPrvi->pobeda20();
+                                $timDrugi->poraz02();
+                                $dobarRezultat = true;
+                            } else if ($drugiTimSetova == 1) {
+                                $timPrvi->pobeda21();
+                                $timDrugi->poraz12();
+                                $dobarRezultat = true;
+                            }
+                        } else if ($prviTimSetova == 1) {
+                            if ($drugiTimSetova == 2) {
+                                $timPrvi->poraz12();
+                                $timDrugi->pobeda21();
+                                $dobarRezultat = true;
+                            }
+                        } else if ($prviTimSetova == 0 && $drugiTimSetova == 2) {
+                            $timPrvi->poraz02();
+                            $timDrugi->pobeda20();
+                            $dobarRezultat = true;
                         }
-                        if ($drugiTimSetova == 1) {
-                            $timPrvi->pobeda21();
-                            $timDrugi->poraz12();
+                        if ($dobarRezultat) {
+                            $timPrvi->updateTim();
+                            $timDrugi->updateTim();
+                            $rezultat = new Rezultat($prviTim, $drugiTim, $prviTimSetova, $drugiTimSetova, date('Y-m-d', strtotime($datum)));
+                            $rezultat->insertResult();
+                            echo 'Utakmica je uneta';
+                            array_push($_SESSION['izmene'], array("izmena" => "unos", "prviTim" => $prviTim, "drugiTim" => $drugiTim, "prviTimSetova" => $prviTimSetova, "drugiTimSetova" => $drugiTimSetova, "datum" => date('Y-m-d', strtotime($datum))));
+                        } else {
+                            echo 'Setovi nisu dobro uneti';
                         }
-                    } else if ($prviTimSetova == 1) {
-                        $timPrvi->poraz12();
-                        $timDrugi->pobeda21();
                     } else {
-                        $timPrvi->poraz02();
-                        $timDrugi->pobeda20();
+                        echo 'Timovi nisu dobro uneti';
                     }
-                    $timPrvi->updateTim();
-                    $timDrugi->updateTim();
-                    $rezultat = new Rezultat($prviTim, $drugiTim, $prviTimSetova, $drugiTimSetova, date('Y-m-d', strtotime($datum)));
-                    $rezultat->insertResult();
-                    echo 'Utakmica je uneta';
-                    unset($_POST['unesi']);
-                    array_push($_SESSION['izmene'], array("izmena" => "unos", "prviTim"=>$prviTim, "drugiTim" => $drugiTim, "prviTimSetova" => $prviTimSetova, "drugiTimSetova" => $drugiTimSetova, "datum" => date('Y-m-d', strtotime($datum))));
                 } else {
-                    echo 'Timovi treba da budu razliciti';
+                    echo 'Datum nije unet';
                 }
+                unset($_POST['unesi']);
             }
             ?>
         </div>

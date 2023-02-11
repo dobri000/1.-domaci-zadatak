@@ -38,7 +38,6 @@ session_start();
                 }
             })
         }
-
     </script>
 </head>
 
@@ -80,7 +79,7 @@ session_start();
                 echo "<span class='teamName'><input type='text' name='drugi_tim' value='" . $timDrugi->getIme() . "' readonly></span><span><input type='number' name = 'drugiSetova' value='" . $rezultat->getDrugiTimSetova() . "' readonly></span>";
                 echo "</div>";
                 echo "<div class='dugme'>";
-                echo "<input type='submit' name='obrisi' value='Obrisi rezultat'>";
+                echo "<input type='submit' name='obrisi' onClick='window.loacation.reload()' value='Obrisi rezultat'>";
                 echo "</div>";
                 echo "</form>";
                 echo "</div>";
@@ -123,7 +122,7 @@ if(isset($_POST['obrisi'])){
     echo $imeDrugog, Tim::returnTeamByName($imeDrugog)->getIme(), $prviTim->getTimId(), $drugiTim->getTimId(), $datum;
     unset($_POST['obrisi']);
     array_push($_SESSION['izmene'], array("izmena" => "brisanje", "prviTim"=>($prviTim->getTimId()), "drugiTim" => ($drugiTim->getTimId()), "prviTimSetova" => $prviSetova, "drugiTimSetova" => $drugiSetova, "datum" => $datum));
-    header("Location: index.php");
+    echo "<meta http-equiv='refresh' content='0'>";
 }
 
 ?>
