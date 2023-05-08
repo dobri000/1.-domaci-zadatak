@@ -19,7 +19,7 @@ session_start();
     </script>
 </head>
 
-<body>
+<body style="background-image: url(./img/background.jpg); background-repeat: no-repeat; background-size: cover; background-attachment: fixed;">
     <nav class="navbar navbar-dark bg-dark">
         <ul>
             <li><a href="index.php">Tabela</a></li>

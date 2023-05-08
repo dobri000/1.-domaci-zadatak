@@ -41,7 +41,7 @@ session_start();
     </script>
 </head>
 
-<body>
+<body style="background-image: url(./img/background.jpg); background-repeat: no-repeat; background-size: cover; background-attachment: fixed;">
     <nav class="navbar navbar-dark bg-dark">
         <ul>
             <li><a href="index.php">Tabela</a></li>
@@ -71,12 +71,12 @@ session_start();
                 $timDrugi = Tim::returnTeamById($rezultat->getDrugiTimId());
                 echo "<div class='rezultat'>";
                 echo "<form action='rezultati.php' method='post'>";
-                echo "<div class='datum'><input type='date' name='datum' value='" . $rezultat->getDatum() . "' readonly></div>";
+                echo "<div class='datum'><input type='date' name='datum' value='" . $rezultat->getDatum() . "' readonly style='background: none'></div>";
                 echo "<div class='team'>";
-                echo "<span class='teamName'><input type='text' name='prvi_tim' value='" . $timPrvi->getIme() . "' readonly></span><span><input type='number' name = 'prviSetova' value='" . $rezultat->getPrviTimSetova() . "' readonly></span>";
+                echo "<span class='teamName'><input type='text' name='prvi_tim' value='" . $timPrvi->getIme() . "' readonly style='background: none'></span><span><input type='number' name = 'prviSetova' value='" . $rezultat->getPrviTimSetova() . "' readonly style='background: none'></span>";
                 echo "</div>";
                 echo "<div class='tim'>";
-                echo "<span class='teamName'><input type='text' name='drugi_tim' value='" . $timDrugi->getIme() . "' readonly></span><span><input type='number' name = 'drugiSetova' value='" . $rezultat->getDrugiTimSetova() . "' readonly></span>";
+                echo "<span class='teamName'><input type='text' name='drugi_tim' value='" . $timDrugi->getIme() . "' readonly style='background: none'></span><span><input type='number' name = 'drugiSetova' value='" . $rezultat->getDrugiTimSetova() . "' readonly style='background: none'></span>";
                 echo "</div>";
                 echo "<div class='dugme'>";
                 echo "<input type='submit' name='obrisi' onClick='window.loacation.reload()' value='Obrisi rezultat'>";
